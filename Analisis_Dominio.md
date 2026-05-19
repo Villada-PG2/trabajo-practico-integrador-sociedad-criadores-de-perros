@@ -21,4 +21,9 @@
 2. Árbol genealógico: Madre y padres probables con sus respectivas probabilidades de paternidad.
 3. Historial de responsables: Lista de responsables que estuvieron a cargo de un mismo perro en distintas fechas.
 4. Responsable actual: Persona que esta actualmente a cargo del perro.
-5. Historial de participaciones: Registro del desempeño del perro en las competencias de las que formó parte.
+5. Historial de participaciones: Registro de las competencias de las que el perro formó parte.
+6. Resultados de concurso: Lista con el desempeño de cada perro en las distintas competencias.
+7. Historial sanitario: Registro de las observaciones medicas hechas sobre un perro, ordenadas cronológicamente.
+8. Perros con restricción sanitaria: Lista de perros con observaciones que impiden su participación en eventos.
+9. Listado de concursos: Concursos filtrados por ciudad, país o fecha.
+10. Perros a cargo de una persona: Listado de perros actuales o históricos bajo responsabilidad de una persona.
