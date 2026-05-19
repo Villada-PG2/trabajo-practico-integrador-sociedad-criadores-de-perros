@@ -17,3 +17,8 @@
 
 ## Salidas
 
+1. Ficha del perro: Información completa del perro.
+2. Árbol genealógico: Madre y padres probables con sus respectivas probabilidades de paternidad.
+3. Historial de responsables: Lista de responsables que estuvieron a cargo de un mismo perro en distintas fechas.
+4. Responsable actual: Persona que esta actualmente a cargo del perro.
+5. Historial de participaciones: Registro del desempeño del perro en las competencias de las que formó parte.
