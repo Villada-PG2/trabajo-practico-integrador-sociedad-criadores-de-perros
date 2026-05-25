@@ -56,10 +56,19 @@ classDiagram
 
     }
 
-    Perro --> Raza
-    Perro --> Camada
-    Camada --> Perro
-    Perro --> HistorialResponsable
-    HistorialResponsable --> Persona
-    Concurso --> TipoConcurso
-    Concurso --> Ciudad
+    Perro --> "1" Raza
+    Perro --> "0..1" Camada
+    Camada --> "1" Perro : madre
+    Camada "1" *-- "0..*" PaternidadProbable
+    PaternidadProbable --> "1" Perro : padreCandidato
+    Perro "1" *-- "1..*" HistorialResponsable
+    HistorialResponsable --> "1" Persona
+    Concurso --> "1" TipoConcurso
+    Concurso --> "1" Ciudad
+    Ciudad --> "1" Pais
+    Concurso "1" *-- "0..*" Participacion
+    Participacion --> "1" Perro
+    Participacion --> "1" TipoReconocimiento
+    Perro "1" *-- "0..*" ObservacionSanitaria
+    ObservacionSanitaria --> "1" TipoObservacion
+    ObservacionSanitaria --> "1" Persona
