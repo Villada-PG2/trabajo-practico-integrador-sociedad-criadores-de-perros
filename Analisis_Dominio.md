@@ -84,3 +84,15 @@
 17. **El sistema debe poder identificar qué perros tienen restricciones sanitarias vigentes que les impidan participar en concursos.**
 18. **El sistema debe permitir listar todos los perros actualmente a cargo de una persona.**
 
+## _**Requerimientos No Funcionales**_
+
+1. **Integridad de los Responsables:** El sistema debe garantizar que en todo momento cada perro tenga como máximo un responsable activo.
+2. **Integridad Genetica:** Las probabilidades de paternidad asociadas a una camada deben sumar como máximo 100%.
+3. **Seguimiento de Datos:** El sistema debe conservar el historial completo de responsables y observaciones sanitarias sin permitir su eliminación.
+4. **Usabilidad:** Las consultas de historial (responsables, participaciones, observaciones) deben dar resultados en orden cronológico.
+5. **Seguridad:** El acceso al sistema debe requerir autenticación, en la que solo usuarios autorizados podrán registrar o modificar datos.
+6. **Disponibilidad:** El sistema debe estar disponible en todo momento durante todo el horario laboral.
+7. **Rendimiento:** Las consultas de historial y listados deben responder rapidamente para volúmenes normales de datos.
+8. **Escalabilidad:** El modelo de datos debe soportar el crecimiento en cantidad de perros, personas y eventos sin disminuir el rendimiento.
+9. **Mantenibilidad:** El sistema debe estar documentado y estructurado de manera que facilite futuras extensiones.
+10. **Portabilidad:** El sistema debe poder ejecutarse en los sistemas operativos de uso común en una organización (Windows/Linux).
