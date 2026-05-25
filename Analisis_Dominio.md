@@ -31,9 +31,14 @@
 
 ---
 
-# Frontera y Alcances
+# Frontera
 
-## Frontera
+## ¿Que incluye el sistema?
 
+1. Gestión de perros de raza y su información individual.
+2. Registro de cruces reproductivos y camadas con paternidad probabilística.
+3. Gestión de responsables y su historial de vinculación con cada perro.
+4. Registro y consulta de concursos caninos y sus participantes.
+5. Registro de observaciones sanitarias y su impacto en la participación en eventos.
 
-
+## ¿Que se excluye del sistema?
