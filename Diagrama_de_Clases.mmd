@@ -43,35 +43,51 @@ classDiagram
     }
 
     class Concurso {
-
+        - str nombre
+        - Date fecha
+        - str frecuencia
+        - TipoConcurso tipoConcurso
+        - Ciudad ciudad
+        - Participacion[list] listaParticipaciones
     }
 
     class TipoConcurso {
-        
+        - str nombre
+        - str descripcion
     }
 
     class Participacion {
-
+        - Date fecha
+        - Perro perro
+        - TipoReconocimiento reconocimiento
     }
 
     class TipoReconocimiento {
-        
+        - str nombre
+        - str descripcion
+        - int nivel
     }
 
     class Ciudad {
-        
+        - str nombre
+        - Pais pais
     }
 
     class País {
-
+        - str nombre
     }
 
     class ObservacionSanitaria {
-
+        - Date fecha
+        - str descripcion
+        - bool implicaRestriccion
+        - TipoObservacion tipo
+        - Persona realizador
     } 
 
     class TipoObservacion {
-
+        - str nombre
+        - str descripcion
     }
 
     Perro --> "1" Raza
@@ -83,7 +99,7 @@ classDiagram
     HistorialResponsable --> "1" Persona
     Concurso --> "1" TipoConcurso
     Concurso --> "1" Ciudad
-    Ciudad --> "1" Pais
+    Ciudad --> "1" País
     Concurso "1" *-- "0..*" Participacion
     Participacion --> "1" Perro
     Participacion --> "1" TipoReconocimiento
