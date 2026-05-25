@@ -1,31 +1,49 @@
 classDiagram
 
     class Perro {
-
+        - str nombre
+        - Date fechaNacimiento
+        - str sexo
+        - Raza raza
+        - Camada camadaOrigen
+        - HistorialResponsable[list] listaHistorialResponsables
+        - ObservacionSanitaria[list] listaObservacionesSanitarias
     }
 
     class Raza {
-        
+        - str nombre
+        - str descripcion
+        - str paisOrigen
     }
 
     class Camada {
-        
+        - Date fechaNacimiento
+        - int cantidadCachorros
+        - Perro madre
+        - PaternidadProbable[list] listaPaternidades
     }
 
     class PaternidadProbable {
-        
+        - float probabilidad
+        - Perro padreCandidato
     }
 
     class HistorialResponsable {
-        
+        - Date fechaInicio
+        - Date fechaFin
+        - Persona persona
     }
 
     class Persona {
-        
+        - str nombre
+        - str apellido
+        - str dni
+        - str telefono
+        - str email
     }
 
     class Concurso {
-        
+
     }
 
     class TipoConcurso {
