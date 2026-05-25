@@ -1,6 +1,7 @@
 # Análisis de Requerimientos — Sociedad Criadores de Perros
 
 ---
+# Entradas y Salidas
 
 ## Entradas
 
@@ -26,4 +27,13 @@
 7. Historial sanitario: Registro de las observaciones medicas hechas sobre un perro, ordenadas cronológicamente.
 8. Perros con restricción sanitaria: Lista de perros con observaciones que impiden su participación en eventos.
 9. Listado de concursos: Concursos filtrados por ciudad, país o fecha.
-10. Perros a cargo de una persona: Listado de perros actuales o históricos bajo responsabilidad de una persona.
+10. Perros a cargo por persona: Listado de perros actuales o históricos bajo responsabilidad de una persona.
+
+---
+
+# Frontera y Alcances
+
+## Frontera
+
+
+
