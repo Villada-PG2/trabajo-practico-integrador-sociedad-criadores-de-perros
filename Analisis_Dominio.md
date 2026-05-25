@@ -58,3 +58,29 @@
 3. **Gestionar la responsabilidad sobre los cachorros:** mantener un historial completo de personas vinculadas a cada perro, identificando quién es el responsable actual.
 4. **Gestionar concursos y participaciones:** registrar las competiciones realizadas en distintas ciudades y países, junto con los resultados obtenidos por cada perro (calificaciones o ausencia en ellas).
 5. **Gestionar el historial sanitario:** registrar observaciones de salud de cualquier origen o contexto, indicando si implican restricciones para la participación en actividades o competiciones.
+
+---
+
+# **Requerimientos Funcionales y No Funcionales**
+
+## _**Requerimientos Funcionales**_
+
+1. **El sistema debe permitir registrar perros con sus datos básicos:** nombre, fecha de nacimiento, sexo y raza.
+2. **El sistema debe permitir registrar las razas:** nombre, descripción y país de origen.
+3. **El sistema debe permitir registrar camadas:** madre, fecha de nacimiento y la lista de cachorros.
+4. **El sistema debe permitir asociar padres probables a una camada, con una probabilidad de paternidad expresada en porcentaje.**
+5. **El sistema debe permitir consultar el árbol de origen de un perro** (madre y padres probables con sus probabilidades).
+6. **El sistema debe permitir registrar personas responsables con sus datos de contacto.**
+7. **El sistema debe permitir asignar un responsable a un perro indicando la fecha de inicio con opción a fecha de fin.**
+8. **El sistema debe permitir consultar el historial de responsables de un perro ordenado cronológicamente.**
+9. **El sistema debe identificar el responsable actual de un perro.** 
+10. **El sistema debe permitir registrar concursos:** nombre, fecha, frecuencia, país, ciudad y tipo de competencia.
+11. **El sistema debe permitir registrar ciudades asociadas a un país.**
+12. **El sistema debe permitir registrar la participación de un perro en un concurso y el reconocimiento obtenido, incluyendo la posibilidad de ausencia de calificación.**
+13. **El sistema debe permitir consultar el historial de participaciones de un perro en concursos.**
+14. **El sistema debe permitir filtrar concursos por ciudad o por país.**
+15. **El sistema debe permitir registrar observaciones sanitarias sobre un perro:** fecha, descripción, tipo de observación, persona que la realiza, y si implica restricción de participación.
+16. **El sistema debe permitir consultar el historial sanitario de un perro.**
+17. **El sistema debe poder identificar qué perros tienen restricciones sanitarias vigentes que les impidan participar en concursos.**
+18. **El sistema debe permitir listar todos los perros actualmente a cargo de una persona.**
+
