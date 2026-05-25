@@ -42,3 +42,9 @@
 5. Registro de observaciones sanitarias y su impacto en la participación en eventos.
 
 ## ¿Que se excluye del sistema?
+
+1. Gestión financiera (venta, compra o valuación de cachorros).
+2. Gestión clínica veterinaria completa (diagnósticos, tratamientos, etc).
+3. Gestión de contratos de acuerdos entre criadores.
+4. Comunicación externa (notificaciones, correos, publicaciones en redes).
+5. Inscripción automática a concursos.
