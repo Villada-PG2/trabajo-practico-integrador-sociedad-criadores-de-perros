@@ -79,17 +79,22 @@ classDiagram
         - Date fecha
         - Perro perro
         - TipoReconocimiento reconocimiento
+        + tieneCalificacion()
+        + getReconocimiento()
     }
 
     class TipoReconocimiento {
         - str nombre
         - str descripcion
         - int nivel
+        + tieneNivel()
+        + esAusenciaDeCalificacion()
     }
 
     class Ciudad {
         - str nombre
         - Pais pais
+        + getPais()
     }
 
     class País {
@@ -102,6 +107,8 @@ classDiagram
         - bool implicaRestriccion
         - TipoObservacion tipo
         - Persona realizador
+        + restriccionParticipacion()
+        + estaVigente()
     } 
 
     class TipoObservacion {
