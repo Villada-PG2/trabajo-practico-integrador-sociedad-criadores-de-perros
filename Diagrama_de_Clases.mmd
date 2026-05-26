@@ -8,12 +8,18 @@ classDiagram
         - Camada camadaOrigen
         - HistorialResponsable[list] listaHistorialResponsables
         - ObservacionSanitaria[list] listaObservacionesSanitarias
+        + getResponsableActual()
+        - registrarCambioResponsable(Persona p, Date fechaInicio)
+        + getParticipaciones()
+        + registrarObservacionSanitaria()
+        + tieneRestriccionVigente()
     }
 
     class Raza {
         - str nombre
         - str descripcion
         - str paisOrigen
+        + esDeRaza()
     }
 
     class Camada {
@@ -21,17 +27,25 @@ classDiagram
         - int cantidadCachorros
         - Perro madre
         - PaternidadProbable[list] listaPaternidades
+        + getMadre()
+        + getCachorros()
+        + getPadresProbables()
+        - validarSumaProbabilidades()
     }
 
     class PaternidadProbable {
         - float probabilidad
         - Perro padreCandidato
+        + getProbabilidad()
+        + getPadreCandidato()
     }
 
     class HistorialResponsable {
         - Date fechaInicio
         - Date fechaFin
         - Persona persona
+        + esVigente()
+        + cerrarVinculacion(Date fechaFin)
     }
 
     class Persona {
@@ -40,6 +54,7 @@ classDiagram
         - str dni
         - str telefono
         - str email
+        + getPerrosActualesACargo()
     }
 
     class Concurso {
@@ -49,6 +64,10 @@ classDiagram
         - TipoConcurso tipoConcurso
         - Ciudad ciudad
         - Participacion[list] listaParticipaciones
+        + registrarParticipacion()
+        + getParticipantes()
+        + filtrarPorCiudad()
+        + filtrarPorPais()
     }
 
     class TipoConcurso {
