@@ -35,3 +35,26 @@ class TipoObservacion(BaseModel):
     nombre: str = Field(..., description="Nombre del tipo de observacion")
     descripcion: str = Field(..., description="Descripcion del tipo de observacion")
 
+
+class ObservacionSanitaria(BaseModel):
+    fecha: date = Field(..., description="Fecha de la observacion")
+    descripcion: str = Field(..., description="Descripcion de la observacion")
+    implicaRestriccion: bool = Field(..., description="Si impide participar en concursos")
+    tipo: TipoObservacion = Field(..., description="Tipo de observacion")
+    realizador: Persona = Field(..., description="Persona que realizo la observacion")
+
+
+class Perro(BaseModel):
+    nombre: str = Field(..., description="Nombre del perro")
+    fechaNacimiento: date = Field(..., description="Fecha de nacimiento")
+    sexo: str = Field(..., description="Sexo del perro")
+    raza: Raza = Field(..., description="Raza del perro")
+    camadaOrigen: Optional["Camada"] = Field(default=None, description="Camada en la que nacio")
+    listaHistorialResponsables: list[HistorialResponsable] = Field(..., description="Historial de responsables (1..*)")
+    listaObservacionesSanitarias: list[ObservacionSanitaria] = Field(..., description="Historial sanitario (0..*)")
+
+
+class PaternidadProbable(BaseModel):
+    probabilidad: float = Field(..., description="Probabilidad de paternidad en porcentaje (0-100)")
+    padreCandidato: Perro = Field(..., description="Perro candidato a padre")
+
