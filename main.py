@@ -54,6 +54,12 @@ class HistorialResponsable(BaseModel):
     fechaFin: Optional[date] = Field(default=None, description="Fecha de fin del vinculo, si ya finalizo")
     persona: Persona = Field(..., description="Persona responsable en este periodo")
 
+    def esVigente(self) -> bool:
+        return self.fechaFin is None
+
+    def cerrarVinculacion(self, fechaFin: date):
+        self.fechaFin = fechaFin
+
 
 class TipoObservacion(BaseModel):
     nombre: str = Field(..., description="Nombre del tipo de observacion")
@@ -67,6 +73,11 @@ class ObservacionSanitaria(BaseModel):
     tipo: TipoObservacion = Field(..., description="Tipo de observacion")
     realizador: Persona = Field(..., description="Persona que realizo la observacion")
 
+    def restriccionParticipacion(self) -> bool:
+        return self.implicaRestriccion
+
+    def estaVigente(self) -> bool:
+        return self.implicaRestriccion
 
 class Perro(BaseModel):
     nombre: str = Field(..., description="Nombre del perro")
@@ -77,6 +88,50 @@ class Perro(BaseModel):
     listaHistorialResponsables: list[HistorialResponsable] = Field(..., description="Historial de responsables (1..*)")
     listaObservacionesSanitarias: list[ObservacionSanitaria] = Field(..., description="Historial sanitario (0..*)")
 
+    @field_validator("listaHistorialResponsables")
+    @classmethod
+    def validarHistorialInicial(cls, value):
+        if not value:
+            raise ValueError("Un perro debe registrarse con al menos un responsable inicial.")
+        return value
+
+    def getResponsableActual(self) -> Optional[Persona]:
+        for historial in self.listaHistorialResponsables:
+            if historial.esVigente():
+                return historial.persona
+        return None
+
+    def registrarCambioResponsable(self, persona: Persona, fechaInicio: date):
+        for historial in self.listaHistorialResponsables:
+            if historial.esVigente():
+                historial.cerrarVinculacion(fechaInicio)
+                break
+        self.listaHistorialResponsables.append(HistorialResponsable(fechaInicio=fechaInicio, persona=persona))
+
+    def registrarObservacionSanitaria(self, fecha: date, descripcion: str, tipo: TipoObservacion, realizador: Persona, implicaRestriccion: bool) -> ObservacionSanitaria:
+        nuevaObservacion = ObservacionSanitaria(
+            fecha=fecha,
+            descripcion=descripcion,
+            implicaRestriccion=implicaRestriccion,
+            tipo=tipo,
+            realizador=realizador,
+        )
+        self.listaObservacionesSanitarias.append(nuevaObservacion)
+        return nuevaObservacion
+
+    def tieneRestriccionVigente(self) -> bool:
+        for obs in self.listaObservacionesSanitarias:
+            if obs.estaVigente():
+                return True
+        return False
+
+    def getParticipaciones(self) -> list["Participacion"]:
+            lista_resultado = []
+            for participacion in PARTICIPACIONES:
+                if participacion.perro is self:
+                    lista_resultado.append(participacion)
+                    
+            return lista_resultado
 
 class PaternidadProbable(BaseModel):
     probabilidad: float = Field(..., description="Probabilidad de paternidad en porcentaje (0-100)")
