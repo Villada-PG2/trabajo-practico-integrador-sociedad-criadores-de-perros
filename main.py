@@ -2,6 +2,17 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from datetime import date
 from typing import Optional
 
+PAISES = []
+CIUDADES = []
+RAZAS = []
+PERSONAS = []
+PERROS = []
+TIPOS_CONCURSO = []
+TIPOS_RECONOCIMIENTO = []
+TIPOS_OBSERVACION = []
+CONCURSOS = []
+PARTICIPACIONES = []
+
 class Pais(BaseModel):
     nombre: str = Field(..., description="Nombre del pais")
 
@@ -10,11 +21,17 @@ class Ciudad(BaseModel):
     nombre: str = Field(..., description="Nombre de la ciudad")
     pais: Pais = Field(..., description="Pais al que pertenece la ciudad")
 
+    def getPais(self) -> Pais:
+        return self.pais
+
 
 class Raza(BaseModel):
     nombre: str = Field(..., description="Nombre de la raza")
     descripcion: str = Field(..., description="Descripcion de la raza")
     paisOrigen: str = Field(..., description="Pais de origen de la raza")
+
+    def esDeRaza(self, nombre: str) -> bool:
+        return self.nombre == nombre
 
 
 class Persona(BaseModel):
@@ -24,6 +41,13 @@ class Persona(BaseModel):
     telefono: str = Field(..., description="Telefono de contacto")
     email: str = Field(..., description="Email de contacto")
 
+    def getPerrosActualesACargo(self) -> list:
+        perrosACargo = []
+        for perro in PERROS:
+            responsable = perro.getResponsableActual()
+            if responsable is not None and responsable is self:
+                perrosACargo.append(perro)
+        return perrosACargo
 
 class HistorialResponsable(BaseModel):
     fechaInicio: date = Field(..., description="Fecha de inicio del vinculo")
