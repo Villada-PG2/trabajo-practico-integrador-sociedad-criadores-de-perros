@@ -85,8 +85,8 @@ class Perro(BaseModel):
     sexo: str = Field(..., description="Sexo del perro")
     raza: Raza = Field(..., description="Raza del perro")
     camadaOrigen: Optional["Camada"] = Field(default=None, description="Camada en la que nacio")
-    listaHistorialResponsables: list[HistorialResponsable] = Field(..., description="Historial de responsables (1..*)")
-    listaObservacionesSanitarias: list[ObservacionSanitaria] = Field(..., description="Historial sanitario (0..*)")
+    listaHistorialResponsables: list[HistorialResponsable] = Field(default_factory=list, description="Historial de responsables (1..*)")
+    listaObservacionesSanitarias: list[ObservacionSanitaria] = Field(default_factory=list, description="Historial sanitario (0..*)")
 
     @field_validator("listaHistorialResponsables")
     @classmethod
@@ -231,3 +231,92 @@ class Concurso(BaseModel):
     @classmethod
     def filtrarPorPais(cls, pais: Pais) -> list["Concurso"]:
         return [concurso for concurso in CONCURSOS if concurso.ciudad.pais is pais]
+
+
+if __name__ == "__main__":
+
+    argentina = Pais(nombre="Argentina")
+    PAISES.append(argentina)
+    cordoba = Ciudad(nombre="Cordoba", pais=argentina)
+    CIUDADES.append(cordoba)
+    labrador = Raza(nombre="Labrador Retriever", descripcion="Raza de caza y compania", paisOrigen="Canada")
+    RAZAS.append(labrador)
+    ana = Persona(nombre="Ana", apellido="Gomez", dni="30111222", telefono="3511234567", email="ana@gmail.com")
+    luis = Persona(nombre="Luis", apellido="Perez", dni="28999888", telefono="3517654321", email="luis@gmail.com")
+    PERSONAS.extend([ana, luis])
+    madre = Perro(
+        nombre="Luna", fechaNacimiento=date(2020, 3, 10), sexo="Hembra", raza=labrador,
+        listaHistorialResponsables=[HistorialResponsable(fechaInicio=date(2020, 5, 1), persona=ana)],
+    )
+    padre = Perro(
+        nombre="Rocky", fechaNacimiento=date(2019, 6, 20), sexo="Macho", raza=labrador,
+        listaHistorialResponsables=[HistorialResponsable(fechaInicio=date(2019, 8, 1), persona=luis)],
+    )
+    PERROS.extend([madre, padre])
+    camada1 = Camada(
+        fechaNacimiento=date(2023, 1, 15),
+        cantidadCachorros=1,
+        madre=madre,
+        listaPaternidades=[PaternidadProbable(probabilidad=80, padreCandidato=padre)],
+    )
+    cachorro = Perro(
+        nombre="Toby", fechaNacimiento=date(2023, 1, 15), sexo="Macho", raza=labrador,
+        camadaOrigen=camada1,
+        listaHistorialResponsables=[HistorialResponsable(fechaInicio=date(2023, 3, 1), persona=ana)],
+    )
+    PERROS.append(cachorro)
+
+    print(f"Cachorros de la camada: {[p.nombre for p in camada1.getCachorros()]}")
+    print(f"Padres probables: {[(pp.padreCandidato.nombre, pp.probabilidad) for pp in camada1.getPadresProbables()]}")
+    print(f"Responsable actual de Toby: {cachorro.getResponsableActual().nombre}")
+    cachorro.registrarCambioResponsable(luis, date(2024, 1, 10))
+    print(f"Nuevo responsable actual de Toby: {cachorro.getResponsableActual().nombre}")
+    print(f"Perros a cargo de Luis: {[p.nombre for p in luis.getPerrosActualesACargo()]}")
+    displasia = TipoObservacion(nombre="Control clinico", descripcion="Chequeo general")
+    TIPOS_OBSERVACION.append(displasia)
+    cachorro.registrarObservacionSanitaria(
+        fecha=date(2024, 2, 1), descripcion="Displasia de cadera leve",
+        tipo=displasia, realizador=ana, implicaRestriccion=True,
+    )
+    print(f"Toby tiene restriccion vigente: {cachorro.tieneRestriccionVigente()}")
+
+    expo = TipoConcurso(nombre="Exposicion", descripcion="Exposicion de raza")
+    TIPOS_CONCURSO.append(expo)
+    mejorDeRaza = TipoReconocimiento(nombre="Mejor de Raza", descripcion="Primer puesto por raza", nivel=1)
+    sinCalificar = TipoReconocimiento(nombre="Sin calificar", descripcion="No obtuvo puntaje", nivel=0)
+    TIPOS_RECONOCIMIENTO.extend([mejorDeRaza, sinCalificar])
+
+    concurso1 = Concurso(
+        nombre="Expo Cordoba 2026", fecha=date(2026, 9, 5), frecuencia="Anual",
+        tipoConcurso=expo, ciudad=cordoba,
+    )
+    CONCURSOS.append(concurso1)
+
+    concurso1.registrarParticipacion(perro=madre, reconocimiento=mejorDeRaza)
+    concurso1.registrarParticipacion(perro=padre, reconocimiento=sinCalificar)
+
+    print(f"Participantes del concurso: {[p.nombre for p in concurso1.getParticipantes()]}")
+    print(f"Participaciones de Luna: {[p.reconocimiento.nombre for p in madre.getParticipaciones()]}")
+    print(f"Concursos en Cordoba: {[c.nombre for c in Concurso.filtrarPorCiudad(cordoba)]}")
+    print(f"Concursos en Argentina: {[c.nombre for c in Concurso.filtrarPorPais(argentina)]}")
+
+    try:
+        PaternidadProbable(probabilidad=150, padreCandidato=padre)
+    except ValueError as error:
+        print(f"Error esperado (probabilidad invalida): {error}")
+
+    try:
+        Camada(
+            fechaNacimiento=date(2024, 1, 1), cantidadCachorros=2, madre=madre,
+            listaPaternidades=[
+                PaternidadProbable(probabilidad=70, padreCandidato=padre),
+                PaternidadProbable(probabilidad=50, padreCandidato=padre),
+            ],
+        )
+    except ValueError as error:
+        print(f"Error esperado (suma de probabilidades > 100%): {error}")
+
+    try:
+        Perro(nombre="SinResponsable", fechaNacimiento=date(2024, 1, 1), sexo="Macho", raza=labrador)
+    except ValueError as error:
+        print(f"Error esperado (perro sin responsable inicial): {error}")
