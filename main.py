@@ -137,11 +137,41 @@ class PaternidadProbable(BaseModel):
     probabilidad: float = Field(..., description="Probabilidad de paternidad en porcentaje (0-100)")
     padreCandidato: Perro = Field(..., description="Perro candidato a padre")
 
+    @field_validator("probabilidad")
+    @classmethod
+    def validarProbabilidad(cls, value: float):
+        if value < 0 or value > 100:
+            raise ValueError("La probabilidad debe estar entre 0 y 100.")
+        return value
+
+    def getProbabilidad(self) -> float:
+        return self.probabilidad
+
+    def getPadreCandidato(self) -> Perro:
+        return self.padreCandidato
+
+    
 class Camada(BaseModel):
     fechaNacimiento: date = Field(..., description="Fecha de nacimiento de la camada")
     cantidadCachorros: int = Field(..., description="Cantidad de cachorros de la camada")
     madre: Perro = Field(..., description="Perro madre de la camada")
     listaPaternidades: list[PaternidadProbable] = Field(..., description="Padres probables con su probabilidad (0..*)")
+
+    @model_validator(mode="after")
+    def validarSumaProbabilidades(self):
+        suma = sum(paternidad.probabilidad for paternidad in self.listaPaternidades)
+        if suma > 100:
+            raise ValueError("La suma de probabilidades de paternidad no puede superar el 100%.")
+        return self
+
+    def getMadre(self) -> Perro:
+        return self.madre
+
+    def getCachorros(self) -> list[Perro]:
+        return [perro for perro in PERROS if perro.camadaOrigen is self]
+
+    def getPadresProbables(self) -> list[PaternidadProbable]:
+        return self.listaPaternidades
 
 
 Perro.model_rebuild()
@@ -156,11 +186,22 @@ class TipoReconocimiento(BaseModel):
     descripcion: str = Field(..., description="Descripcion del reconocimiento")
     nivel: int = Field(..., description="Nivel/jerarquia del reconocimiento")
 
+    def tieneNivel(self) -> bool:
+        return self.nivel > 0
+
+    def esAusenciaDeCalificacion(self) -> bool:
+        return self.nivel == 0
 
 class Participacion(BaseModel):
     fecha: date = Field(..., description="Fecha de la participacion")
     perro: Perro = Field(..., description="Perro participante")
     reconocimiento: TipoReconocimiento = Field(..., description="Reconocimiento obtenido")
+
+    def tieneCalificacion(self) -> bool:
+        return not self.reconocimiento.esAusenciaDeCalificacion()
+
+    def getReconocimiento(self) -> TipoReconocimiento:
+        return self.reconocimiento
 
 
 class Concurso(BaseModel):
@@ -171,4 +212,22 @@ class Concurso(BaseModel):
     ciudad: Ciudad = Field(..., description="Ciudad donde se realiza")
     listaParticipaciones: list[Participacion] = Field(..., description="Participaciones registradas (0..*)")
 
+    def registrarParticipacion(self, perro: Perro, reconocimiento: TipoReconocimiento, fecha: Optional[date] = None) -> Participacion:
+        nuevaParticipacion = Participacion(
+            fecha=fecha if fecha is not None else self.fecha,
+            perro=perro,
+            reconocimiento=reconocimiento,)
+        self.listaParticipaciones.append(nuevaParticipacion)
+        PARTICIPACIONES.append(nuevaParticipacion)
+        return nuevaParticipacion
 
+    def getParticipantes(self) -> list[Perro]:
+        return [participacion.perro for participacion in self.listaParticipaciones]
+
+    @classmethod
+    def filtrarPorCiudad(cls, ciudad: Ciudad) -> list["Concurso"]:
+        return [concurso for concurso in CONCURSOS if concurso.ciudad is ciudad]
+
+    @classmethod
+    def filtrarPorPais(cls, pais: Pais) -> list["Concurso"]:
+        return [concurso for concurso in CONCURSOS if concurso.ciudad.pais is pais]
