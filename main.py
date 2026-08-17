@@ -58,3 +58,38 @@ class PaternidadProbable(BaseModel):
     probabilidad: float = Field(..., description="Probabilidad de paternidad en porcentaje (0-100)")
     padreCandidato: Perro = Field(..., description="Perro candidato a padre")
 
+class Camada(BaseModel):
+    fechaNacimiento: date = Field(..., description="Fecha de nacimiento de la camada")
+    cantidadCachorros: int = Field(..., description="Cantidad de cachorros de la camada")
+    madre: Perro = Field(..., description="Perro madre de la camada")
+    listaPaternidades: list[PaternidadProbable] = Field(..., description="Padres probables con su probabilidad (0..*)")
+
+
+Perro.model_rebuild()
+
+class TipoConcurso(BaseModel):
+    nombre: str = Field(..., description="Nombre del tipo de concurso")
+    descripcion: str = Field(..., description="Descripcion del tipo de concurso")
+
+
+class TipoReconocimiento(BaseModel):
+    nombre: str = Field(..., description="Nombre del reconocimiento")
+    descripcion: str = Field(..., description="Descripcion del reconocimiento")
+    nivel: int = Field(..., description="Nivel/jerarquia del reconocimiento")
+
+
+class Participacion(BaseModel):
+    fecha: date = Field(..., description="Fecha de la participacion")
+    perro: Perro = Field(..., description="Perro participante")
+    reconocimiento: TipoReconocimiento = Field(..., description="Reconocimiento obtenido")
+
+
+class Concurso(BaseModel):
+    nombre: str = Field(..., description="Nombre del concurso")
+    fecha: date = Field(..., description="Fecha de realizacion")
+    frecuencia: str = Field(..., description="Frecuencia del concurso")
+    tipoConcurso: TipoConcurso = Field(..., description="Tipo de concurso")
+    ciudad: Ciudad = Field(..., description="Ciudad donde se realiza")
+    listaParticipaciones: list[Participacion] = Field(..., description="Participaciones registradas (0..*)")
+
+
